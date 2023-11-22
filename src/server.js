@@ -1,1 +1,1 @@
-export const server = "https://testlms.onrender.com";
+export const server = "https://testlms-api.onrender.com";
