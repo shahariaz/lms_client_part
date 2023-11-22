@@ -1,1 +1,1 @@
-export const server = "http://localhost:7000";
+export const server = "https://testlms.onrender.com";
