@@ -1,10 +1,11 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../styles/styles.js";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server.js";
 import { toast } from "react-toastify";
+import Header from "../header/Header.jsx";
+import Footer from "../footer/Footer.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,30 +16,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios
-      .post(`${server}/api/v1/login`, {
+    try {
+      const res = await axios.post(`${server}/api/v1/login`, {
         email,
         password,
-      })
-      .then((res) => {
-        toast.success("Login Success!");
-        navigate("/teacher");
-      })
-      .catch((err) => {
-        // toast.error(err.response.data.message);
-        console.log(err);
       });
+
+      toast.success("Login Success!");
+      navigate("/teacher");
+    } catch (err) {
+      console.error(err);
+      // Handle error and show appropriate message
+      toast.error("Login failed. Please check your credentials.");
+    }
   };
 
   return (
-    <div className="min-h-80 bg-rgb-245-252-255 flex flex-col justify-center items-center pt-12 pb-12 mt-12 sm:px-6 lg:px-8 ">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Login to your account
-        </h2>
-      </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="flex-grow flex items-center justify-center">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Login to your account
+          </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
@@ -91,8 +91,8 @@ const Login = () => {
                 )}
               </div>
             </div>
-            <div className={`${styles.noramlFlex} justify-between`}>
-              <div className={`${styles.noramlFlex}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   name="remember-me"
@@ -108,7 +108,7 @@ const Login = () => {
               </div>
               <div className="text-sm">
                 <a
-                  href=".forgot-password"
+                  href="forgot-password"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Forgot your password?
@@ -126,6 +126,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
