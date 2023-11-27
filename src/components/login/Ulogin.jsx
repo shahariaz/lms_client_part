@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import Header from "../header/Header.jsx";
 import Footer from "../footer/Footer.jsx";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../AuthContextApi.jsx";
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,9 +21,33 @@ const Login = () => {
         email,
         password,
       });
+      console.log(res.data);
+      const { role } = res.data?.data; // Assuming your server response includes a 'role' field
 
       toast.success("Login Success!");
-      navigate("/teacher");
+      const userData = res.data.data;
+
+      // Call the login function from the context API with the user data
+      login(userData);
+
+      // Redirect based on the user role
+      switch (role) {
+        case "student":
+          navigate(`/student/${res.data.data._id}`);
+          break;
+        case "teacher":
+          navigate(`/teacher/${res.data.data._id}`);
+          break;
+        case "parent":
+          navigate(`/parent/${res.data.data._id}`);
+          break;
+        case "admin":
+          navigate(`/admin/${res.data.data._id}`);
+          break;
+        default:
+          // Handle unknown role or other cases
+          break;
+      }
     } catch (err) {
       console.error(err);
       // Handle error and show appropriate message

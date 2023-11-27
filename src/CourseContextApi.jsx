@@ -1,46 +1,24 @@
-// src/context/CourseContext.js
-import React, { createContext, useContext, useReducer } from "react";
+// Create a new file for the context
+// context/CourseContext.js
+
+import { createContext, useContext, useState } from "react";
 
 const CourseContext = createContext();
 
-const initialState = {
-  formData: {
-    courseName: "",
-    description: "",
-    // Add other fields as needed
-  },
-  currentStep: 1,
-  // Add other state properties as needed
+export const useCourseContext = () => {
+  return useContext(CourseContext);
 };
 
-const courseReducer = (state, action) => {
-  switch (action.type) {
-    case "SET_DATA":
-      return { ...state, formData: { ...state.formData, ...action.payload } };
-    case "NEXT_STEP":
-      return { ...state, currentStep: state.currentStep + 1 };
-    // Add other cases as needed
-    default:
-      return state;
-  }
-};
+export const CourseProvider = ({ children }) => {
+  const [courses, setCourses] = useState([]);
 
-const CourseProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(courseReducer, initialState);
+  const updateCourses = (newCourses) => {
+    setCourses(newCourses);
+  };
 
   return (
-    <CourseContext.Provider value={{ state, dispatch }}>
+    <CourseContext.Provider value={{ courses, updateCourses }}>
       {children}
     </CourseContext.Provider>
   );
 };
-
-const useCourse = () => {
-  const context = useContext(CourseContext);
-  if (!context) {
-    throw new Error("useCourse must be used within a CourseProvider");
-  }
-  return context;
-};
-
-export { CourseProvider, useCourse };

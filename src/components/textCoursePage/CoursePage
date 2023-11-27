@@ -1,0 +1,34 @@
+// ViewCoursePage.js import React, { useState, useEffect } from "react"; import
+axios from "axios"; const ViewCoursePage = () => { const [courseData,
+setCourseData] = useState(null); useEffect(() => { const fetchCourseData = async
+() => { try { const response = await axios.get(
+"http://localhost:8080/api/courses/your-course-id" // Replace with the actual
+course ID ); setCourseData(response.data); } catch (error) {
+console.error("Error fetching course data:", error); } }; fetchCourseData(); },
+[]); if (!courseData) { return
+<div>Loading...</div>
+; } return (
+<div className="container mx-auto mt-8">
+  <h1 className="text-3xl font-bold mb-4">View Course</h1>
+
+  {courseData.sections.map((section, sectionIndex) => (
+  <div key="{sectionIndex}" className="border p-4 mb-4 rounded">
+    <h2 className="text-xl font-bold mb-2">{section.name}</h2>
+
+    {section.units.map((unit, unitIndex) => (
+    <div key="{unitIndex}" className="border p-4 mb-4 rounded">
+      <h3 className="text-lg font-bold mb-2">{unit.name}</h3>
+
+      {unit.lessons.map((lesson, lessonIndex) => (
+      <div key="{lessonIndex}" className="border p-4 mb-4 rounded">
+        <h4 className="text-md font-bold mb-2">{lesson.title}</h4>
+        <p className="mb-2">{lesson.content}</p>
+        <p className="text-sm text-gray-500">Type: {lesson.type}</p>
+      </div>
+      ))}
+    </div>
+    ))}
+  </div>
+  ))}
+</div>
+); }; export default ViewCoursePage;

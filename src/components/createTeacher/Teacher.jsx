@@ -1,5 +1,4 @@
 // src/components/CreateTeacher.js
-// src/components/CreateTeacher.js
 import React, { useState } from "react";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -7,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CustomModal from "../model/Model";
 import styled from "styled-components";
+
 const StyledCreateTeacher = styled.div`
   margin-bottom: 20px;
 `;
@@ -91,13 +91,11 @@ const CreateTeacher = () => {
         profilePic: formData.profilePic,
       };
 
-      // Replace 'YOUR_API_ENDPOINT' with your actual backend API endpoint
       const response = await axios.post(
         "http://localhost:7000/api/v1/admins/create-teacher-account",
         requestData
       );
 
-      // Check the response status or any other condition to determine success
       if (response.status === 201) {
         toast.success("Teacher created successfully!");
         setIsModalOpen(false);
